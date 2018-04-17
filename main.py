@@ -48,14 +48,16 @@ def new_post():
 
     #Validate the form so user doesnt publish an empty title or body
     if request.method == 'POST':
-        blog_title = request.form['title']
-        blog_body = request.form['body']
+        blog_title = request.form['blog_title']
+        blog_body = request.form['blog_body']
         
         if blog_title == '':
             bt_error = "Oopsie! you forgot a title for your blog post."
-            
         if blog_body == '':
             bb_error = "Whoa! You cant have a blog post without content."
+
+        if bt_error or bb_error:
+            return render_template('newpost.html', bt_error=bt_error, bb_error=bb_error, blog_title=blog_title, blog_body=blog_body)
 
         #NO errors we commit and send user to new_post's individual page  
         else:
@@ -66,7 +68,7 @@ def new_post():
             url = "/blog?id=" + str(new_post.id)
             return redirect(url)
 
-    return render_template('newpost.html', bt_error=bt_error, bb_error=bb_error)
+    return render_template('newpost.html')
 
 @app.route('/', methods=['POST', 'GET'])
 def index():

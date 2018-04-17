@@ -7,18 +7,20 @@
         <label>
             Title for New Blog Post:
             <br>
-            <input type="text" name='title' placeholder="Better be good!" />
+            <input name='blog_title' type="text" value='{{blog_title}}'>
         </label>
         <br>
-        <span class="error">{{bt_error}}</span>
+        <p class=error>{{ bt_error }}</p>
         <br >
+        <br>
         <label>
             New Blog Content:
-        </label>
             <br>
-            <textarea name='body' placeholder="Show me what you got!"/></textarea>
+            <textarea name='blog_body'>{{blog_body}}</textarea>
+        </label>
         <br>
-        <span class="error">{{bb_error}}</span>
+        <br>
+        <p class="error">{{ bb_error }}</p>
         <br>
         <input type="submit" value='Publish' />
     </form>
