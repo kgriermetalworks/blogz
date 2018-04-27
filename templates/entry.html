@@ -4,7 +4,9 @@
 
         <h1>{{ entry.title }}</h1>
         <div id="display">
-            <p>{{ entry.body }}</p>
+            <p class="body">{{ entry.body }}</p>
+            <p class="foot-tag">Posted on: {{ entry.pub_date }}</p>
+            <p class='foot-tag'>Posted by: <a href="/blog?user={{ entry.owner_id }}">{{ entry.owner.username }}</a></p>
         </div>
 
     {% endblock %}

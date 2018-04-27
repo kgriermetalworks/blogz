@@ -53,9 +53,9 @@ def login():
             user = users.first()
             if password == user.password:
                 session['user'] = user.username
-                flash('welcome back, '+user.username)
+                flash('Welcome Back, '+user.username+'!')
                 return redirect("/newpost")
-        flash('bad username or password')
+        flash('Bad Username or Password')
         return redirect("/login")
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -66,10 +66,10 @@ def signup():
         verify = request.form['verify']
         username_db_count = User.query.filter_by(username=username).count()
         if username_db_count > 0:
-            flash('yikes! "' + username + '" is already taken and password reminders are not implemented')
+            flash('Yikes! "' + username + '" is already taken and password reminders are not implemented')
             return redirect('/signup')
         if password != verify:
-            flash('passwords did not match')
+            flash('Passwords did not match')
             return redirect('/signup')
         user = User(username=username, password=password)
         db.session.add(user)
@@ -86,16 +86,25 @@ def logout():
 
 @app.route('/blog', methods=['GET'])
 def blog():
+
+    blog_id = request.args.get('id')
+    user_id = request.args.get('user')
+
     #This query will list all rows in the table in DESC order. shows most recent post --> oldest
     all_blogs = Blog.query.order_by(Blog.pub_date.desc()).all()
-    print('======================================', all_blogs)
-    
-    #GET blog Id so link will fuction to individual pages
-    blog_id = request.args.get('id')
-    if (blog_id):
+
+    #GET blog Id so link will fuction to individual blog entries
+    if blog_id:
         entry = Blog.query.get(blog_id)
         return render_template('entry.html', title="Blog Entry", entry=entry)
 
+    #GET user's ID to process the ind user's page with a list of their blog posts
+    if user_id:
+        individuals_blogs = Blog.query.filter_by(owner_id=user_id).all()
+        return render_template('userpage.html', individuals_blogs=individuals_blogs)
+    
+    
+    #this will render all blog posts.
     return render_template('blog.html', all_blogs=all_blogs)
 
     
@@ -126,15 +135,21 @@ def new_post():
 
             url = "/blog?id=" + str(new_post.id)
             return redirect(url)
-
+   
     return render_template('newpost.html')
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['GET'])
 def index():
-    #Send user immediately to blog main page
-    return redirect('/blog')
+    #this query will show all users in alphabetical order
+    all_users = User.query.all()
 
-endpoints_without_login = ['signup', 'login', 'static', 'blog', 'index']
+    return render_template('index.html', all_users=all_users)
+
+
+
+endpoints_without_login = ['signup', 'login', 'userpage', 'blog', 'index', 'static']
+
+
 
 @app.before_request
 def require_login():

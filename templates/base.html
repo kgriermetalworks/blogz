@@ -7,14 +7,12 @@
 <body>
     <header>  
         <div>
-            <a href="/index">Home</a> | <a href="/blog">All Posts</a> | <a href="/newpost">Add a Blog Post</a>
+            <a href="/">Home</a> | <a href="/blog">All Posts</a> | <a href="/newpost">Add a Blog Post</a>
+            <div id="pos"><a href='/login'>Log In</a> | <a href='/logout'>Log Out</a></div>
         </div>
     </header>
     <br>
-    <div>
-        <a href='/login'>Log In</a> | <a href='/logout'>Log Out</a>
-    </div>
-
+    
     {% with messages = get_flashed_messages(with_categories=True) %}
     <ul>   
         {% for category,message in messages %}
